@@ -8,7 +8,7 @@ import api from '../../services/api';
 
 import Header from '../../components/Header';
 
-import formatValue, { formatDate } from '../../utils/formatValue';
+import formatValue from '../../utils/formatValue';
 
 import { Container, CardContainer, Card, TableContainer } from './styles';
 
@@ -53,10 +53,7 @@ const Dashboard: React.FC = () => {
               <p>Entradas</p>
               <img src={income} alt="Income" />
             </header>
-            <h1 data-testid="balance-income">
-              R$
-              {formatValue(balance.income)}
-            </h1>
+            <h1 data-testid="balance-income">{formatValue(balance.income)}</h1>
           </Card>
           <Card>
             <header>
@@ -64,7 +61,6 @@ const Dashboard: React.FC = () => {
               <img src={outcome} alt="Outcome" />
             </header>
             <h1 data-testid="balance-outcome">
-              R$
               {formatValue(balance.outcome)}
             </h1>
           </Card>
@@ -73,10 +69,7 @@ const Dashboard: React.FC = () => {
               <p>Total</p>
               <img src={total} alt="Total" />
             </header>
-            <h1 data-testid="balance-total">
-              R$
-              {formatValue(balance.total)}
-            </h1>
+            <h1 data-testid="balance-total">{formatValue(balance.total)}</h1>
           </Card>
         </CardContainer>
 
@@ -86,8 +79,8 @@ const Dashboard: React.FC = () => {
               <tr>
                 <th>Título</th>
                 <th>Preço</th>
+                <th>Tipo</th>
                 <th>Categoria</th>
-                <th>Data</th>
               </tr>
             </thead>
 
@@ -96,12 +89,15 @@ const Dashboard: React.FC = () => {
                 transactions.map(transaction => (
                   <tr key={transaction.id}>
                     <td className="title">{transaction.title}</td>
-                    <td className="income">
-                      R$
-                      {formatValue(transaction.value)}
+                    <td className={transaction.type}>
+                      {transaction.type === 'outcome' &&
+                        `- ${formatValue(transaction.value)}`}
+
+                      {transaction.type === 'income' &&
+                        formatValue(transaction.value)}
                     </td>
+                    <td>{transaction.type}</td>
                     <td>{transaction.category.title}</td>
-                    <td>{formatDate(transaction.created_at)}</td>
                   </tr>
                 ))}
             </tbody>
